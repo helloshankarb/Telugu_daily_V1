@@ -16,7 +16,7 @@ if (Platform.OS !== 'web') {
 export const AD_UNIT_IDS = {
   banner: {
     ios: 'ca-app-pub-8215136966042517/2425759189',
-    android: 'ca-app-pub-8215136966042517/2425759189',
+    android: 'ca-app-pub-8215136966042517/7006752588',
   },
   interstitial: {
     ios: 'YOUR_IOS_INTERSTITIAL_AD_UNIT_ID', // Replace with your iOS interstitial ad unit ID
