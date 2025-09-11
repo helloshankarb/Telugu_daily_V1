@@ -5,6 +5,7 @@ import { Play, RotateCcw, CircleCheck as CheckCircle, Circle, Trophy, Target } f
 import * as Speech from 'expo-speech';
 import { getSentencesByDay } from '@/data/sentences';
 import { useTheme } from '@/hooks/useTheme';
+import BannerAdComponent from '@/components/BannerAd';
 
 export default function HomeScreen() {
   const { theme } = useTheme();
@@ -155,6 +156,11 @@ export default function HomeScreen() {
                     Viewed {viewCount} times
                   </Text>
                 </View>
+
+                {/* Show banner ad after every 10th sentence */}
+                {sentenceNumber % 10 === 0 && (
+                  <BannerAdComponent />
+                )}
               </View>
             );
           })}

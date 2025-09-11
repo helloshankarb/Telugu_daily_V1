@@ -7,9 +7,11 @@ import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } 
 import { NotoSansTelugu_400Regular } from '@expo-google-fonts/noto-sans-telugu';
 import { useFrameworkReady } from '@/hooks/useFrameworkReady';
 import { ThemeProvider } from '@/hooks/useTheme';
+import { useAdMob } from '@/hooks/useAdMob';
 
 export default function RootLayout() {
   useFrameworkReady();
+  const { isInitialized } = useAdMob();
   const [showSplash, setShowSplash] = useState(true);
   const fadeAnim = new Animated.Value(1);
   const scaleAnim = new Animated.Value(0.8);
@@ -22,7 +24,7 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
-    if (fontsLoaded) {
+    if (fontsLoaded && isInitialized) {
       // Start transition after fonts are loaded
       setTimeout(() => {
         Animated.parallel([
@@ -41,9 +43,9 @@ export default function RootLayout() {
         });
       }, 1500); // Show splash for 1.5 seconds
     }
-  }, [fontsLoaded]);
+  }, [fontsLoaded, isInitialized]);
 
-  if (!fontsLoaded || showSplash) {
+  if (!fontsLoaded || !isInitialized || showSplash) {
     return (
       <View style={styles.container}>
         <StatusBar style="light" />
