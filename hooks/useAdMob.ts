@@ -1,14 +1,30 @@
 import { useEffect, useState } from 'react';
-import mobileAds, { MaxAdContentRating } from 'react-native-google-mobile-ads';
+import { Platform } from 'react-native';
+
+// Only import AdMob on native platforms
+let mobileAds: any = null;
+let MaxAdContentRating: any = null;
+
+if (Platform.OS !== 'web') {
+  const adMobModule = require('react-native-google-mobile-ads');
+  mobileAds = adMobModule.default;
+  MaxAdContentRating = adMobModule.MaxAdContentRating;
+}
 
 export const useAdMob = () => {
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(Platform.OS === 'web');
 
   useEffect(() => {
-    initializeAdMob();
+    if (Platform.OS !== 'web') {
+      initializeAdMob();
+    }
   }, []);
 
   const initializeAdMob = async () => {
+    if (Platform.OS === 'web' || !mobileAds) {
+      return;
+    }
+
     try {
       await mobileAds().initialize();
       
