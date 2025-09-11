@@ -197,6 +197,34 @@ export default function ProfileScreen() {
         <View style={styles.appInfo}>
           <Text style={styles.appInfoText}>Telugu Daily v1.0.0</Text>
           <Text style={styles.appInfoText}>Made with ❤️ for Telugu learners</Text>
+          
+          <View style={styles.learningTipsContainer}>
+            <Text style={styles.learningTipsTitle}>💡 Learning Tips</Text>
+            <View style={styles.tipItem}>
+              <Text style={styles.tipIcon}>📚</Text>
+              <Text style={styles.tipText}>
+                Tap "Know It" once to mark a sentence as learned
+              </Text>
+            </View>
+            <View style={styles.tipItem}>
+              <Text style={styles.tipIcon}>🌟</Text>
+              <Text style={styles.tipText}>
+                Tap "Know It" twice to master a sentence completely
+              </Text>
+            </View>
+            <View style={styles.tipItem}>
+              <Text style={styles.tipIcon}>🔄</Text>
+              <Text style={styles.tipText}>
+                Mastered sentences help build your confidence and fluency
+              </Text>
+            </View>
+            <View style={styles.tipItem}>
+              <Text style={styles.tipIcon}>🎯</Text>
+              <Text style={styles.tipText}>
+                Try to master at least 10 sentences each day for best results
+              </Text>
+            </View>
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -408,5 +436,38 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     color: '#8E8E93',
     marginVertical: 2,
+  },
+  learningTipsContainer: {
+    backgroundColor: '#F0F8FF',
+    borderRadius: 12,
+    padding: 16,
+    marginTop: 20,
+    borderLeftWidth: 4,
+    borderLeftColor: '#2AA8A8',
+  },
+  learningTipsTitle: {
+    fontSize: 16,
+    fontFamily: 'Poppins-SemiBold',
+    color: '#2C3E50',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  tipItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 8,
+    paddingHorizontal: 4,
+  },
+  tipIcon: {
+    fontSize: 16,
+    marginRight: 8,
+    marginTop: 2,
+  },
+  tipText: {
+    flex: 1,
+    fontSize: 13,
+    fontFamily: 'Poppins-Regular',
+    color: '#2C3E50',
+    lineHeight: 18,
   },
 });

@@ -12,7 +12,7 @@ export default function HomeScreen() {
   const [currentDay] = useState(1);
   const [completedSentences, setCompletedSentences] = useState<{ [key: number]: boolean }>({});
   const [masteredSentences, setMasteredSentences] = useState<{ [key: number]: boolean }>({});
-  const [viewedCount, setViewedCount] = useState<{ [key: number]: number }>({});
+  const [knowItCount, setKnowItCount] = useState<{ [key: number]: number }>({});
   const [adError, setAdError] = useState<string | null>(null);
   
   const todaysSentences = getSentencesByDay(currentDay);
@@ -36,13 +36,98 @@ export default function HomeScreen() {
   };
 
   const handleKnowIt = (sentenceId: number) => {
+    const currentCount = (knowItCount[sentenceId] || 0) + 1;
+    
+    // Update know it count
+    setKnowItCount(prev => ({
+      ...prev,
+      [sentenceId]: currentCount
+    }));
+    
+    // Mark as completed on first tap
     setCompletedSentences(prev => ({
       ...prev,
       [sentenceId]: true
     }));
     
-    // Increment viewed count
-    setViewedCount(prev => ({
+    // Mark as mastered after 2+ taps
+    if (currentCount >= 2) {
+      setMasteredSentences(prev => ({
+        ...prev,
+        [sentenceId]: true
+      }));
+    }
+  };
+
+  const getSentenceStatus = (sentenceId: number) => {
+    const count = knowItCount[sentenceId] || 0;
+    const isCompleted = completedSentences[sentenceId];
+    const isMastered = masteredSentences[sentenceId];
+    
+    if (isMastered) return { status: 'mastered', count };
+    if (isCompleted) return { status: 'learning', count };
+    return { status: 'new', count };
+  };
+
+  const getButtonText = (sentenceId: number) => {
+    const { status, count } = getSentenceStatus(sentenceId);
+    
+    if (status === 'mastered') return 'Mastered! 🌟';
+    if (status === 'learning' && count === 1) return 'Know It Again';
+    return 'Know It';
+  };
+
+  const getButtonStyle = (sentenceId: number) => {
+    const { status } = getSentenceStatus(sentenceId);
+    
+    if (status === 'mastered') return styles.knowItButtonMastered;
+    if (status === 'learning') return styles.knowItButtonCompleted;
+    return styles.knowItButton;
+  };
+
+  const getButtonTextStyle = (sentenceId: number) => {
+    const { status } = getSentenceStatus(sentenceId);
+    
+    if (status === 'mastered') return styles.knowItTextMastered;
+    if (status === 'learning') return styles.knowItTextCompleted;
+    return styles.knowItText;
+  };
+
+  const getStatusText = (sentenceId: number) => {
+    const { status, count } = getSentenceStatus(sentenceId);
+    
+    if (status === 'mastered') return `Mastered! (${count} times)`;
+    if (status === 'learning') return `Learning... (${count}/2 to master)`;
+    return 'Tap "Know It" to learn';
+  };
+
+  const resetProgress = () => {
+    Alert.alert(
+      '🔄 Reset Daily Progress',
+      'This will clear all your progress for today. You can always start fresh!\n\nAre you sure you want to continue?',
+      [
+        { 
+          text: 'Keep Learning', 
+          style: 'cancel',
+          onPress: () => console.log('Reset cancelled')
+        },
+        { 
+          text: '🗑️ Reset All', 
+          style: 'destructive',
+          onPress: () => {
+            setCompletedSentences({});
+            setMasteredSentences({});
+            setKnowItCount({});
+            Alert.alert('✅ Reset Complete', 'Your daily progress has been cleared. Ready for a fresh start!');
+          }
+        }
+      ],
+      {
+        cancelable: true,
+        userInterfaceStyle: 'light'
+      }
+    );
+  };
       ...prev,
       [sentenceId]: (prev[sentenceId] || 0) + 1
     }));
@@ -64,7 +149,7 @@ export default function HomeScreen() {
           onPress: () => {
             setCompletedSentences({});
             setMasteredSentences({});
-            setViewedCount({});
+            setKnowItCount({});
             Alert.alert('✅ Reset Complete', 'Your daily progress has been cleared. Ready for a fresh start!');
           }
         }
@@ -113,8 +198,7 @@ export default function HomeScreen() {
         {/* Sentences List */}
         <View style={styles.sentencesContainer}>
           {todaysSentences.map((sentence, index) => {
-            const isCompleted = completedSentences[sentence.id];
-            const viewCount = viewedCount[sentence.id] || 0;
+            const { status } = getSentenceStatus(sentence.id);
             const sentenceNumber = index + 1;
             const shouldShowAd = sentenceNumber % 10 === 0;
             
@@ -144,23 +228,18 @@ export default function HomeScreen() {
                   </TouchableOpacity>
 
                   <TouchableOpacity
-                    style={[
-                      styles.knowItButton,
-                      isCompleted && styles.knowItButtonCompleted
-                    ]}
+                    style={getButtonStyle(sentence.id)}
                     onPress={() => handleKnowIt(sentence.id)}
                   >
-                    {isCompleted && <CheckCircle size={16} color="#27AE60" style={styles.checkIcon} />}
-                    <Text style={[
-                      styles.knowItText,
-                      isCompleted && styles.knowItTextCompleted
-                    ]}>
-                      Know It
+                    {status === 'mastered' && <CheckCircle size={16} color="#F5A623" style={styles.checkIcon} />}
+                    {status === 'learning' && <CheckCircle size={16} color="#27AE60" style={styles.checkIcon} />}
+                    <Text style={getButtonTextStyle(sentence.id)}>
+                      {getButtonText(sentence.id)}
                     </Text>
                   </TouchableOpacity>
 
-                  <Text style={styles.viewedText}>
-                    Viewed {viewCount} times
+                  <Text style={styles.statusText}>
+                    {getStatusText(sentence.id)}
                   </Text>
                 </View>
 
@@ -350,7 +429,22 @@ const styles = StyleSheet.create({
   knowItTextCompleted: {
     color: '#27AE60',
   },
-  viewedText: {
+  knowItButtonMastered: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFF8E1',
+    borderWidth: 2,
+    borderColor: '#F5A623',
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    marginBottom: 12,
+  },
+  knowItTextMastered: {
+    color: '#F5A623',
+  },
+  statusText: {
     fontSize: 12,
     fontFamily: 'Poppins-Regular',
     color: '#8E8E93',
