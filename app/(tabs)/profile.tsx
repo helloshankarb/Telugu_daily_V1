@@ -213,12 +213,6 @@ export default function ProfileScreen() {
               </Text>
             </View>
             <View style={styles.tipItem}>
-              <Text style={styles.tipIcon}>🔄</Text>
-              <Text style={styles.tipText}>
-                Mastered sentences help build your confidence and fluency
-              </Text>
-            </View>
-            <View style={styles.tipItem}>
               <Text style={styles.tipIcon}>🎯</Text>
               <Text style={styles.tipText}>
                 Try to master at least 10 sentences each day for best results
