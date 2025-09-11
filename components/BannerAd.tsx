@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Platform, Text, Dimensions } from 'react-native';
+import { View, StyleSheet, Platform, Text, Dimensions, ActivityIndicator } from 'react-native';
 import { getAdUnitId, AD_CONFIG } from '@/constants/AdConfig';
 
 // Only import AdMob components on native platforms
@@ -30,6 +30,8 @@ export default function BannerAdComponent({
   onAdLoaded,
   onAdFailedToLoad
 }: BannerAdComponentProps) {
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [hasError, setHasError] = React.useState(false);
   const screenWidth = Dimensions.get('window').width;
   
   // Don't render ads on web platform
@@ -37,8 +39,8 @@ export default function BannerAdComponent({
     // Show placeholder on web for testing
     return (
       <View style={styles.webPlaceholder}>
-        <Text style={styles.placeholderText}>📱 Banner Ad Placeholder</Text>
-        <Text style={styles.placeholderSubtext}>Ads will show on mobile devices</Text>
+        <Text style={styles.placeholderText}>📱 Real Banner Ad</Text>
+        <Text style={styles.placeholderSubtext}>This will be a real ad on mobile</Text>
       </View>
     );
   }
@@ -53,8 +55,8 @@ export default function BannerAdComponent({
     );
   }
 
-  // Use adaptive banner for better responsiveness
-  const defaultSize = screenWidth > 728 ? BannerAdSize.LEADERBOARD : BannerAdSize.BANNER;
+  // Use standard banner size for better ad fill rate
+  const defaultSize = BannerAdSize.BANNER;
   const finalAdUnitId = adUnitId || getAdUnitId('banner');
   const finalSize = size || defaultSize;
 
@@ -62,16 +64,36 @@ export default function BannerAdComponent({
   
   return (
     <View style={styles.container}>
+      {isLoading && !hasError && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="small" color="#2AA8A8" />
+          <Text style={styles.loadingText}>Loading ad...</Text>
+        </View>
+      )}
+      
+      {hasError && (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>Ad failed to load</Text>
+        </View>
+      )}
+      
       <BannerAd
         unitId={finalAdUnitId}
         size={finalSize}
-        requestOptions={AD_CONFIG.requestConfig}
+        requestOptions={{
+          requestNonPersonalizedAdsOnly: false,
+          keywords: ['education', 'language', 'learning', 'telugu'],
+        }}
         onAdLoaded={() => {
           console.log('Banner ad loaded');
+          setIsLoading(false);
+          setHasError(false);
           onAdLoaded?.();
         }}
         onAdFailedToLoad={(error) => {
           console.error('Banner ad failed to load:', error);
+          setIsLoading(false);
+          setHasError(true);
           onAdFailedToLoad?.(error);
         }}
         onAdOpened={() => {
@@ -89,21 +111,34 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 60,
+    minHeight: 50,
     backgroundColor: '#FFFFFF',
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#E1E1E6',
     width: '100%',
+    overflow: 'hidden',
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 50,
+    flexDirection: 'row',
+    gap: 8,
+  },
+  loadingText: {
+    fontSize: 12,
+    fontFamily: 'Poppins-Regular',
+    color: '#8E8E93',
   },
   webPlaceholder: {
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 60,
-    backgroundColor: '#F0F0F0',
+    minHeight: 50,
+    backgroundColor: '#E8F4FD',
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#D0D0D0',
+    borderColor: '#2AA8A8',
     paddingHorizontal: 16,
     paddingVertical: 8,
     width: '100%',
@@ -111,24 +146,25 @@ const styles = StyleSheet.create({
   placeholderText: {
     fontSize: 14,
     fontFamily: 'Poppins-Medium',
-    color: '#8E8E93',
+    color: '#2AA8A8',
     textAlign: 'center',
   },
   placeholderSubtext: {
     fontSize: 10,
     fontFamily: 'Poppins-Regular',
-    color: '#B0B0B0',
+    color: '#2AA8A8',
     textAlign: 'center',
     marginTop: 2,
+    opacity: 0.7,
   },
   errorContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 60,
-    backgroundColor: '#FFE6E6',
+    minHeight: 50,
+    backgroundColor: '#F8F9FA',
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#FFB3B3',
+    borderColor: '#E1E1E6',
     paddingHorizontal: 16,
     paddingVertical: 8,
     width: '100%',
@@ -136,7 +172,7 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: 12,
     fontFamily: 'Poppins-Regular',
-    color: '#E74C3C',
+    color: '#8E8E93',
     textAlign: 'center',
   },
 });

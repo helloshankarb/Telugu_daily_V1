@@ -214,17 +214,14 @@ export default function HomeScreen() {
 
                 {shouldShowAd && (
                   <View style={styles.adContainer}>
-                    <Text style={styles.adLabel}>Advertisement</Text>
+                    <Text style={styles.adLabel}>Sponsored</Text>
                     <BannerAdComponent 
                       onAdLoaded={() => console.log(`Banner ad loaded after sentence ${sentenceNumber}`)}
                       onAdFailedToLoad={(error) => {
                         console.log(`Banner ad failed after sentence ${sentenceNumber}:`, error);
-                        setAdError(`Ad failed: ${error}`);
+                        setAdError(null); // Don't show error to user, just log it
                       }}
                     />
-                    {adError && (
-                      <Text style={styles.adErrorText}>{adError}</Text>
-                    )}
                   </View>
                 )}
               </React.Fragment>

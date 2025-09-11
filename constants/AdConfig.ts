@@ -34,8 +34,9 @@ export const getAdUnitId = (adType: keyof typeof AD_UNIT_IDS): string => {
   
   console.log(`AdConfig: Getting ad unit for ${adType}, __DEV__ = ${__DEV__}`);
   
-  // Use test ads during development
-  if (__DEV__ && TestIds) {
+  // Always use real ads for testing - comment this out to use test ads
+  // if (__DEV__ && TestIds) {
+  if (false && TestIds) {
     console.log('Using test ad unit for development:', adType);
     switch (adType) {
       case 'banner':
