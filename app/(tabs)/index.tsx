@@ -13,6 +13,7 @@ export default function HomeScreen() {
   const [completedSentences, setCompletedSentences] = useState<{ [key: number]: boolean }>({});
   const [masteredSentences, setMasteredSentences] = useState<{ [key: number]: boolean }>({});
   const [knowItCount, setKnowItCount] = useState<{ [key: number]: number }>({});
+  const [viewedCount, setViewedCount] = useState<{ [key: number]: number }>({});
   const [adError, setAdError] = useState<string | null>(null);
   
   const todaysSentences = getSentencesByDay(currentDay);
@@ -22,6 +23,7 @@ export default function HomeScreen() {
   useEffect(() => {
     console.log('HomeScreen: Component mounted, sentences loaded:', todaysSentences.length);
   }, []);
+
   const handleTextToSpeech = async (text: string, isEnglish: boolean = true) => {
     try {
       const language = isEnglish ? 'en-US' : 'te-IN';
@@ -57,6 +59,12 @@ export default function HomeScreen() {
         [sentenceId]: true
       }));
     }
+
+    // Update viewed count
+    setViewedCount(prev => ({
+      ...prev,
+      [sentenceId]: (prev[sentenceId] || 0) + 1
+    }));
   };
 
   const getSentenceStatus = (sentenceId: number) => {
@@ -118,38 +126,7 @@ export default function HomeScreen() {
             setCompletedSentences({});
             setMasteredSentences({});
             setKnowItCount({});
-            Alert.alert('✅ Reset Complete', 'Your daily progress has been cleared. Ready for a fresh start!');
-          }
-        }
-      ],
-      {
-        cancelable: true,
-        userInterfaceStyle: 'light'
-      }
-    );
-  };
-      ...prev,
-      [sentenceId]: (prev[sentenceId] || 0) + 1
-    }));
-  };
-
-  const resetProgress = () => {
-    Alert.alert(
-      '🔄 Reset Daily Progress',
-      'This will clear all your progress for today. You can always start fresh!\n\nAre you sure you want to continue?',
-      [
-        { 
-          text: 'Keep Learning', 
-          style: 'cancel',
-          onPress: () => console.log('Reset cancelled')
-        },
-        { 
-          text: '🗑️ Reset All', 
-          style: 'destructive',
-          onPress: () => {
-            setCompletedSentences({});
-            setMasteredSentences({});
-            setKnowItCount({});
+            setViewedCount({});
             Alert.alert('✅ Reset Complete', 'Your daily progress has been cleared. Ready for a fresh start!');
           }
         }
@@ -198,7 +175,8 @@ export default function HomeScreen() {
         {/* Sentences List */}
         <View style={styles.sentencesContainer}>
           {todaysSentences.map((sentence, index) => {
-            const { status } = getSentenceStatus(sentence.id);
+            const isCompleted = completedSentences[sentence.id];
+            const viewCount = viewedCount[sentence.id] || 0;
             const sentenceNumber = index + 1;
             const shouldShowAd = sentenceNumber % 10 === 0;
             
@@ -228,18 +206,23 @@ export default function HomeScreen() {
                   </TouchableOpacity>
 
                   <TouchableOpacity
-                    style={getButtonStyle(sentence.id)}
+                    style={[
+                      styles.knowItButton,
+                      isCompleted && styles.knowItButtonCompleted
+                    ]}
                     onPress={() => handleKnowIt(sentence.id)}
                   >
-                    {status === 'mastered' && <CheckCircle size={16} color="#F5A623" style={styles.checkIcon} />}
-                    {status === 'learning' && <CheckCircle size={16} color="#27AE60" style={styles.checkIcon} />}
-                    <Text style={getButtonTextStyle(sentence.id)}>
-                      {getButtonText(sentence.id)}
+                    {isCompleted && <CheckCircle size={16} color="#27AE60" style={styles.checkIcon} />}
+                    <Text style={[
+                      styles.knowItText,
+                      isCompleted && styles.knowItTextCompleted
+                    ]}>
+                      Know It
                     </Text>
                   </TouchableOpacity>
 
-                  <Text style={styles.statusText}>
-                    {getStatusText(sentence.id)}
+                  <Text style={styles.viewedText}>
+                    Viewed {viewCount} times
                   </Text>
                 </View>
 
@@ -418,6 +401,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#E8F5E8',
     borderColor: '#27AE60',
   },
+  knowItButtonMastered: {
+    backgroundColor: '#FFF3CD',
+    borderColor: '#F5A623',
+  },
   checkIcon: {
     marginRight: 8,
   },
@@ -429,22 +416,10 @@ const styles = StyleSheet.create({
   knowItTextCompleted: {
     color: '#27AE60',
   },
-  knowItButtonMastered: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#FFF8E1',
-    borderWidth: 2,
-    borderColor: '#F5A623',
-    borderRadius: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    marginBottom: 12,
-  },
   knowItTextMastered: {
     color: '#F5A623',
   },
-  statusText: {
+  viewedText: {
     fontSize: 12,
     fontFamily: 'Poppins-Regular',
     color: '#8E8E93',
