@@ -114,7 +114,7 @@ export default function HomeScreen() {
             const sentenceNumber = index + 1;
             
             return (
-              <View key={sentence.id}>
+              <React.Fragment key={sentence.id}>
                 <View style={styles.sentenceCard}>
                   <View style={styles.cardHeader}>
                     <Text style={styles.sentenceNumber}>#{sentenceNumber}</Text>
@@ -159,9 +159,11 @@ export default function HomeScreen() {
 
                 {/* Show banner ad after every 10th sentence */}
                 {sentenceNumber % 10 === 0 && (
-                  <BannerAdComponent />
+                  <View style={styles.adContainer}>
+                    <BannerAdComponent />
+                  </View>
                 )}
-              </View>
+              </React.Fragment>
             );
           })}
         </View>
@@ -337,6 +339,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     color: '#8E8E93',
     textAlign: 'center',
+  },
+  adContainer: {
+    marginVertical: 16,
+    alignItems: 'center',
+    backgroundColor: '#F8F9FA',
+    borderRadius: 8,
+    padding: 8,
   },
   bottomPadding: {
     height: 40,

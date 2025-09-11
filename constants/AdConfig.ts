@@ -23,6 +23,7 @@ export const getAdUnitId = (adType: keyof typeof AD_UNIT_IDS): string => {
   
   // Use test ads during development
   if (__DEV__) {
+    console.log('Using test ad unit for development:', adType);
     switch (adType) {
       case 'banner':
         return TestIds.BANNER;
@@ -36,6 +37,7 @@ export const getAdUnitId = (adType: keyof typeof AD_UNIT_IDS): string => {
   }
   
   // Use production ad unit IDs
+  console.log('Using production ad unit for:', adType);
   return Platform.select({
     ios: adUnit.ios,
     android: adUnit.android,

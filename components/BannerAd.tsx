@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
+import { View, StyleSheet, Platform, Text } from 'react-native';
 import { getAdUnitId, AD_CONFIG } from '@/constants/AdConfig';
 
 // Only import AdMob components on native platforms
@@ -23,13 +23,19 @@ export default function BannerAdComponent({
 }: BannerAdComponentProps) {
   // Don't render ads on web platform
   if (Platform.OS === 'web') {
-    return null;
+    // Show placeholder on web for testing
+    return (
+      <View style={styles.webPlaceholder}>
+        <Text style={styles.placeholderText}>📱 Banner Ad (Mobile Only)</Text>
+      </View>
+    );
   }
 
   const defaultSize = BannerAdSize?.BANNER || 'BANNER';
   const finalAdUnitId = adUnitId || getAdUnitId('banner');
   const finalSize = size || defaultSize;
 
+  console.log('Rendering BannerAd with unitId:', finalAdUnitId);
   return (
     <View style={styles.container}>
       <BannerAd
@@ -51,9 +57,27 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 16,
-    backgroundColor: '#F8F9FA',
-    borderRadius: 8,
-    padding: 8,
+    minHeight: 50,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#E1E1E6',
+  },
+  webPlaceholder: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 50,
+    backgroundColor: '#F0F0F0',
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#D0D0D0',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  placeholderText: {
+    fontSize: 12,
+    fontFamily: 'Poppins-Regular',
+    color: '#8E8E93',
+    textAlign: 'center',
   },
 });

@@ -22,10 +22,12 @@ export const useAdMob = () => {
 
   const initializeAdMob = async () => {
     if (Platform.OS === 'web' || !mobileAds) {
+      console.log('Skipping AdMob initialization on web platform');
       return;
     }
 
     try {
+      console.log('Initializing AdMob...');
       await mobileAds().initialize();
       
       // Configure ad settings
@@ -48,6 +50,8 @@ export const useAdMob = () => {
       console.log('AdMob initialized successfully');
     } catch (error) {
       console.error('AdMob initialization failed:', error);
+      // Set as initialized even if failed to prevent blocking the app
+      setIsInitialized(true);
     }
   };
 
