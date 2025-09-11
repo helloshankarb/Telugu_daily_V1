@@ -4,8 +4,8 @@ import { TestIds } from 'react-native-google-mobile-ads';
 // Ad Unit IDs - Replace these with your actual ad unit IDs from AdMob console
 export const AD_UNIT_IDS = {
   banner: {
-    ios: 'YOUR_IOS_BANNER_AD_UNIT_ID', // Replace with your iOS banner ad unit ID
-    android: 'YOUR_ANDROID_BANNER_AD_UNIT_ID', // Replace with your Android banner ad unit ID
+    ios: 'ca-app-pub-8215136966042517/2425759189', // Replace with your iOS banner ad unit ID
+    android: 'ca-app-pub-8215136966042517/2425759189', // Replace with your Android banner ad unit ID
   },
   interstitial: {
     ios: 'YOUR_IOS_INTERSTITIAL_AD_UNIT_ID', // Replace with your iOS interstitial ad unit ID
