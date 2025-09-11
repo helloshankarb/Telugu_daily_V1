@@ -6,29 +6,39 @@ let mobileAds: any = null;
 let MaxAdContentRating: any = null;
 
 if (Platform.OS !== 'web') {
-  const adMobModule = require('react-native-google-mobile-ads');
-  mobileAds = adMobModule.default;
-  MaxAdContentRating = adMobModule.MaxAdContentRating;
+  try {
+    const adMobModule = require('react-native-google-mobile-ads');
+    mobileAds = adMobModule.default;
+    MaxAdContentRating = adMobModule.MaxAdContentRating;
+    console.log('AdMob hook: Module imported successfully');
+  } catch (error) {
+    console.error('AdMob hook: Failed to import module:', error);
+  }
 }
 
 export const useAdMob = () => {
   const [isInitialized, setIsInitialized] = useState(Platform.OS === 'web');
+  const [initError, setInitError] = useState<string | null>(null);
 
   useEffect(() => {
     if (Platform.OS !== 'web') {
       initializeAdMob();
+    } else {
+      console.log('AdMob hook: Skipping initialization on web platform');
     }
   }, []);
 
   const initializeAdMob = async () => {
     if (Platform.OS === 'web' || !mobileAds) {
-      console.log('Skipping AdMob initialization on web platform');
+      console.log('AdMob hook: Skipping initialization - web platform or no mobileAds');
+      setIsInitialized(true);
       return;
     }
 
     try {
-      console.log('Initializing AdMob...');
+      console.log('AdMob hook: Starting initialization...');
       await mobileAds().initialize();
+      console.log('AdMob hook: Basic initialization complete');
       
       // Configure ad settings
       await mobileAds().setRequestConfiguration({
@@ -46,14 +56,16 @@ export const useAdMob = () => {
         testDeviceIdentifiers: ['EMULATOR'],
       });
 
+      console.log('AdMob hook: Request configuration set');
       setIsInitialized(true);
-      console.log('AdMob initialized successfully');
+      console.log('AdMob hook: Initialization completed successfully');
     } catch (error) {
-      console.error('AdMob initialization failed:', error);
+      console.error('AdMob hook: Initialization failed:', error);
+      setInitError(error?.toString() || 'Unknown error');
       // Set as initialized even if failed to prevent blocking the app
       setIsInitialized(true);
     }
   };
 
-  return { isInitialized };
+  return { isInitialized, initError };
 };

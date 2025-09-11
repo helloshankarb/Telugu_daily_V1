@@ -1,11 +1,22 @@
 import { Platform } from 'react-native';
-import { TestIds } from 'react-native-google-mobile-ads';
+
+// Import TestIds only on native platforms
+let TestIds: any = null;
+if (Platform.OS !== 'web') {
+  try {
+    const adMobModule = require('react-native-google-mobile-ads');
+    TestIds = adMobModule.TestIds;
+    console.log('AdConfig: TestIds imported successfully');
+  } catch (error) {
+    console.error('AdConfig: Failed to import TestIds:', error);
+  }
+}
 
 // Ad Unit IDs - Replace these with your actual ad unit IDs from AdMob console
 export const AD_UNIT_IDS = {
   banner: {
-    ios: 'ca-app-pub-8215136966042517/2425759189', // Replace with your iOS banner ad unit ID
-    android: 'ca-app-pub-8215136966042517/2425759189', // Replace with your Android banner ad unit ID
+    ios: 'ca-app-pub-8215136966042517/2425759189',
+    android: 'ca-app-pub-8215136966042517/2425759189',
   },
   interstitial: {
     ios: 'YOUR_IOS_INTERSTITIAL_AD_UNIT_ID', // Replace with your iOS interstitial ad unit ID
@@ -21,8 +32,10 @@ export const AD_UNIT_IDS = {
 export const getAdUnitId = (adType: keyof typeof AD_UNIT_IDS): string => {
   const adUnit = AD_UNIT_IDS[adType];
   
+  console.log(`AdConfig: Getting ad unit for ${adType}, __DEV__ = ${__DEV__}`);
+  
   // Use test ads during development
-  if (__DEV__) {
+  if (__DEV__ && TestIds) {
     console.log('Using test ad unit for development:', adType);
     switch (adType) {
       case 'banner':
@@ -37,12 +50,14 @@ export const getAdUnitId = (adType: keyof typeof AD_UNIT_IDS): string => {
   }
   
   // Use production ad unit IDs
-  console.log('Using production ad unit for:', adType);
-  return Platform.select({
+  const productionId = Platform.select({
     ios: adUnit.ios,
     android: adUnit.android,
-    default: TestIds.BANNER,
+    default: TestIds?.BANNER || 'ca-app-pub-3940256099942544/6300978111',
   });
+  
+  console.log('Using production ad unit for:', adType, 'ID:', productionId);
+  return productionId;
 };
 
 // Ad configuration
@@ -52,7 +67,7 @@ export const AD_CONFIG = {
   
   // Ad request configuration
   requestConfig: {
-    requestNonPersonalizedAdsOnly: true,
+    requestNonPersonalizedAdsOnly: false,
     keywords: ['education', 'language', 'learning', 'telugu'],
   },
 };

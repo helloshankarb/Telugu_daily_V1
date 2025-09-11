@@ -13,11 +13,15 @@ export default function HomeScreen() {
   const [completedSentences, setCompletedSentences] = useState<{ [key: number]: boolean }>({});
   const [masteredSentences, setMasteredSentences] = useState<{ [key: number]: boolean }>({});
   const [viewedCount, setViewedCount] = useState<{ [key: number]: number }>({});
+  const [adError, setAdError] = useState<string | null>(null);
   
   const todaysSentences = getSentencesByDay(currentDay);
   const completedCount = Object.keys(completedSentences).length;
   const masteredCount = Object.keys(masteredSentences).length;
 
+  useEffect(() => {
+    console.log('HomeScreen: Component mounted, sentences loaded:', todaysSentences.length);
+  }, []);
   const handleTextToSpeech = async (text: string, isEnglish: boolean = true) => {
     try {
       const language = isEnglish ? 'en-US' : 'te-IN';
@@ -112,6 +116,9 @@ export default function HomeScreen() {
             const isCompleted = completedSentences[sentence.id];
             const viewCount = viewedCount[sentence.id] || 0;
             const sentenceNumber = index + 1;
+            const shouldShowAd = sentenceNumber % 10 === 0;
+            
+            console.log(`Sentence ${sentenceNumber}: shouldShowAd = ${shouldShowAd}`);
             
             return (
               <React.Fragment key={sentence.id}>
@@ -157,10 +164,19 @@ export default function HomeScreen() {
                   </Text>
                 </View>
 
-                {/* Show banner ad after every 10th sentence */}
-                {sentenceNumber % 10 === 0 && (
+                {shouldShowAd && (
                   <View style={styles.adContainer}>
-                    <BannerAdComponent />
+                    <Text style={styles.adLabel}>Advertisement</Text>
+                    <BannerAdComponent 
+                      onAdLoaded={() => console.log(`Banner ad loaded after sentence ${sentenceNumber}`)}
+                      onAdFailedToLoad={(error) => {
+                        console.log(`Banner ad failed after sentence ${sentenceNumber}:`, error);
+                        setAdError(`Ad failed: ${error}`);
+                      }}
+                    />
+                    {adError && (
+                      <Text style={styles.adErrorText}>{adError}</Text>
+                    )}
                   </View>
                 )}
               </React.Fragment>
@@ -346,6 +362,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8F9FA',
     borderRadius: 8,
     padding: 8,
+    minHeight: 60,
+    justifyContent: 'center',
+  },
+  adLabel: {
+    fontSize: 10,
+    fontFamily: 'Poppins-Regular',
+    color: '#8E8E93',
+    marginBottom: 4,
+    textTransform: 'uppercase',
+  },
+  adErrorText: {
+    fontSize: 10,
+    fontFamily: 'Poppins-Regular',
+    color: '#E74C3C',
+    marginTop: 4,
+    textAlign: 'center',
   },
   bottomPadding: {
     height: 40,
