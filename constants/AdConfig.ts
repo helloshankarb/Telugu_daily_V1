@@ -15,7 +15,7 @@ if (Platform.OS !== 'web') {
 // Ad Unit IDs - Replace these with your actual ad unit IDs from AdMob console
 export const AD_UNIT_IDS = {
   banner: {
-    ios: 'ca-app-pub-8215136966042517/2425759189',
+    ios: 'ca-app-pub-8215136966042517/7006752588',
     android: 'ca-app-pub-8215136966042517/7006752588',
   },
   interstitial: {
