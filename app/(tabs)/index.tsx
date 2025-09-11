@@ -22,7 +22,7 @@ export default function HomeScreen() {
   useEffect(() => {
     console.log('HomeScreen: Component mounted, sentences loaded:', todaysSentences.length);
   }, []);
-  
+
   const handleTextToSpeech = async (text: string, isEnglish: boolean = true) => {
     try {
       const language = isEnglish ? 'en-US' : 'te-IN';
@@ -387,6 +387,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#E8F5E8',
     borderColor: '#27AE60',
   },
+  knowItButtonMastered: {
+    backgroundColor: '#FFF8E1',
+    borderColor: '#F5A623',
+  },
   checkIcon: {
     marginRight: 8,
   },
@@ -398,22 +402,16 @@ const styles = StyleSheet.create({
   knowItTextCompleted: {
     color: '#27AE60',
   },
-  knowItButtonMastered: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#FFF8E1',
-    borderWidth: 2,
-    borderColor: '#F5A623',
-    borderRadius: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    marginBottom: 12,
-  },
   knowItTextMastered: {
     color: '#F5A623',
   },
   statusText: {
+    fontSize: 12,
+    fontFamily: 'Poppins-Regular',
+    color: '#8E8E93',
+    textAlign: 'center',
+  },
+  viewedText: {
     fontSize: 12,
     fontFamily: 'Poppins-Regular',
     color: '#8E8E93',
