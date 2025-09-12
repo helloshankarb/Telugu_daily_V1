@@ -170,7 +170,7 @@ export default function HomeScreen() {
             const sentenceNumber = index + 1;
             const shouldShowAd = sentenceNumber % 10 === 0;
             
-            console.log(`Sentence ${sentenceNumber}: shouldShowAd = ${shouldShowAd}`);
+            console.log(`HomeScreen: Sentence ${sentenceNumber}, shouldShowAd = ${shouldShowAd}`);
             
             return (
               <React.Fragment key={sentence.id}>
@@ -215,9 +215,9 @@ export default function HomeScreen() {
                   <View style={styles.adContainer}>
                     <Text style={styles.adLabel}>Sponsored</Text>
                     <BannerAdComponent 
-                      onAdLoaded={() => console.log(`Banner ad loaded after sentence ${sentenceNumber}`)}
+                      onAdLoaded={() => console.log(`HomeScreen: Banner ad loaded after sentence ${sentenceNumber}`)}
                       onAdFailedToLoad={(error) => {
-                        console.log(`Banner ad failed after sentence ${sentenceNumber}:`, error);
+                        console.log(`HomeScreen: Banner ad failed after sentence ${sentenceNumber}:`, error);
                       }}
                     />
                   </View>
@@ -415,11 +415,16 @@ const styles = StyleSheet.create({
   adContainer: {
     marginVertical: 12,
     alignItems: 'center',
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#FFFFFF',
     borderRadius: 8,
-    padding: 4,
-    minHeight: 70,
+    padding: 8,
+    minHeight: 80,
     justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
   adLabel: {
     fontSize: 10,

@@ -30,39 +30,38 @@ export const useAdMob = () => {
 
   const initializeAdMob = async () => {
     if (Platform.OS === 'web' || !mobileAds) {
-      console.log('AdMob hook: Skipping initialization - web platform or no mobileAds');
+      console.log('useAdMob: Skipping initialization - web platform or no mobileAds');
       setIsInitialized(true);
       return;
     }
 
     try {
-      console.log('AdMob hook: Starting initialization...');
+      console.log('useAdMob: Starting AdMob initialization...');
       await mobileAds().initialize();
-      console.log('AdMob hook: Basic initialization complete');
+      console.log('useAdMob: Basic initialization complete');
       
       // Configure ad settings
       await mobileAds().setRequestConfiguration({
-        // Update max ad content rating
+        // Set max ad content rating to PG for family-friendly content
         maxAdContentRating: MaxAdContentRating.PG,
         
-        // Indicate that you want your content treated as child-directed for purposes of COPPA.
+        // Not child-directed content
         tagForChildDirectedTreatment: false,
         
-        // Indicate that you want the ad request to be handled in a
-        // manner suitable for users under the age of consent.
+        // Not under age of consent
         tagForUnderAgeOfConsent: false,
         
-        // Remove test device identifiers for production
+        // No test devices for production
         testDeviceIdentifiers: [],
       });
 
-      console.log('AdMob hook: Request configuration set');
+      console.log('useAdMob: Request configuration set successfully');
       setIsInitialized(true);
-      console.log('AdMob hook: Initialization completed successfully');
+      console.log('useAdMob: AdMob initialization completed successfully');
     } catch (error) {
-      console.error('AdMob hook: Initialization failed:', error);
+      console.error('useAdMob: AdMob initialization failed:', error);
       setInitError(error?.toString() || 'Unknown error');
-      // Set as initialized even if failed to prevent blocking the app
+      // Still set as initialized to prevent blocking the app
       setIsInitialized(true);
     }
   };

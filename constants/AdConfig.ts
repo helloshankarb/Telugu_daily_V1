@@ -32,16 +32,16 @@ export const AD_UNIT_IDS = {
 export const getAdUnitId = (adType: keyof typeof AD_UNIT_IDS): string => {
   const adUnit = AD_UNIT_IDS[adType];
   
-  console.log(`AdConfig: Getting ad unit for ${adType}, __DEV__ = ${__DEV__}`);
+  console.log(`AdConfig: Getting ad unit for ${adType}`);
   
-  // Use production ad unit IDs
+  // Always use production ad unit IDs
   const productionId = Platform.select({
     ios: adUnit.ios,
     android: adUnit.android,
     default: adUnit.android, // Fallback to Android ID
   });
   
-  console.log('Using production ad unit for:', adType, 'ID:', productionId);
+  console.log(`AdConfig: Using production ad unit for ${adType}:`, productionId);
   return productionId;
 };
 
@@ -53,7 +53,7 @@ export const AD_CONFIG = {
   // Ad request configuration
   requestConfig: {
     requestNonPersonalizedAdsOnly: false,
-    keywords: ['education', 'language', 'learning', 'telugu', 'study', 'vocabulary'],
+    keywords: ['education', 'language', 'learning', 'telugu', 'study', 'vocabulary', 'indian', 'south indian'],
     contentUrl: 'https://telugulearning.app',
   },
 };
