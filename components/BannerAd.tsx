@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Platform, Text, Dimensions, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Platform, Text, Dimensions } from 'react-native';
 import { getAdUnitId, AD_CONFIG } from '@/constants/AdConfig';
 
 // Only import AdMob components on native platforms
@@ -30,8 +30,6 @@ export default function BannerAdComponent({
   onAdLoaded,
   onAdFailedToLoad
 }: BannerAdComponentProps) {
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [hasError, setHasError] = React.useState(false);
   const screenWidth = Dimensions.get('window').width;
   
   // Don't render ads on web platform
@@ -55,8 +53,8 @@ export default function BannerAdComponent({
     );
   }
 
-  // Use standard banner size for better ad fill rate
-  const defaultSize = BannerAdSize.BANNER;
+  // Use adaptive banner for better performance and fill rate
+  const defaultSize = BannerAdSize.ADAPTIVE_BANNER;
   const finalAdUnitId = adUnitId || getAdUnitId('banner');
   const finalSize = size || defaultSize;
 
@@ -64,36 +62,21 @@ export default function BannerAdComponent({
   
   return (
     <View style={styles.container}>
-      {isLoading && !hasError && (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="small" color="#2AA8A8" />
-          <Text style={styles.loadingText}>Loading ad...</Text>
-        </View>
-      )}
-      
-      {hasError && (
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>Ad failed to load</Text>
-        </View>
-      )}
-      
       <BannerAd
         unitId={finalAdUnitId}
         size={finalSize}
         requestOptions={{
-          requestNonPersonalizedAdsOnly: false,
-          keywords: ['education', 'language', 'learning', 'telugu'],
+          ...AD_CONFIG.requestConfig,
+          networkExtras: {
+            collapsible: 'bottom',
+          },
         }}
         onAdLoaded={() => {
           console.log('Banner ad loaded');
-          setIsLoading(false);
-          setHasError(false);
           onAdLoaded?.();
         }}
         onAdFailedToLoad={(error) => {
           console.error('Banner ad failed to load:', error);
-          setIsLoading(false);
-          setHasError(true);
           onAdFailedToLoad?.(error);
         }}
         onAdOpened={() => {
@@ -101,6 +84,12 @@ export default function BannerAdComponent({
         }}
         onAdClosed={() => {
           console.log('Banner ad closed');
+        }}
+        onAdClicked={() => {
+          console.log('Banner ad clicked');
+        }}
+        onAdImpression={() => {
+          console.log('Banner ad impression recorded');
         }}
       />
     </View>
@@ -111,30 +100,19 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 50,
+    minHeight: 60,
     backgroundColor: '#FFFFFF',
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#E1E1E6',
     width: '100%',
     overflow: 'hidden',
-  },
-  loadingContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: 50,
-    flexDirection: 'row',
-    gap: 8,
-  },
-  loadingText: {
-    fontSize: 12,
-    fontFamily: 'Poppins-Regular',
-    color: '#8E8E93',
+    marginVertical: 4,
   },
   webPlaceholder: {
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 50,
+    minHeight: 60,
     backgroundColor: '#E8F4FD',
     borderRadius: 8,
     borderWidth: 1,
@@ -160,7 +138,7 @@ const styles = StyleSheet.create({
   errorContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 50,
+    minHeight: 60,
     backgroundColor: '#F8F9FA',
     borderRadius: 8,
     borderWidth: 1,

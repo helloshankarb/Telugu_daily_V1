@@ -13,7 +13,6 @@ export default function HomeScreen() {
   const [completedSentences, setCompletedSentences] = useState<{ [key: number]: boolean }>({});
   const [masteredSentences, setMasteredSentences] = useState<{ [key: number]: boolean }>({});
   const [knowItCount, setKnowItCount] = useState<{ [key: number]: number }>({});
-  const [adError, setAdError] = useState<string | null>(null);
   
   const todaysSentences = getSentencesByDay(currentDay);
   const completedCount = Object.keys(completedSentences).length;
@@ -219,7 +218,6 @@ export default function HomeScreen() {
                       onAdLoaded={() => console.log(`Banner ad loaded after sentence ${sentenceNumber}`)}
                       onAdFailedToLoad={(error) => {
                         console.log(`Banner ad failed after sentence ${sentenceNumber}:`, error);
-                        setAdError(null); // Don't show error to user, just log it
                       }}
                     />
                   </View>
@@ -415,12 +413,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   adContainer: {
-    marginVertical: 16,
+    marginVertical: 12,
     alignItems: 'center',
     backgroundColor: '#F8F9FA',
     borderRadius: 8,
-    padding: 8,
-    minHeight: 60,
+    padding: 4,
+    minHeight: 70,
     justifyContent: 'center',
   },
   adLabel: {
@@ -429,13 +427,6 @@ const styles = StyleSheet.create({
     color: '#8E8E93',
     marginBottom: 4,
     textTransform: 'uppercase',
-  },
-  adErrorText: {
-    fontSize: 10,
-    fontFamily: 'Poppins-Regular',
-    color: '#E74C3C',
-    marginTop: 4,
-    textAlign: 'center',
   },
   bottomPadding: {
     height: 40,

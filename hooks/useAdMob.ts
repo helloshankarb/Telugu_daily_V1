@@ -52,8 +52,8 @@ export const useAdMob = () => {
         // manner suitable for users under the age of consent.
         tagForUnderAgeOfConsent: false,
         
-        // An array of test device IDs to allow.
-        testDeviceIdentifiers: ['EMULATOR'],
+        // Remove test device identifiers for production
+        testDeviceIdentifiers: [],
       });
 
       console.log('AdMob hook: Request configuration set');
