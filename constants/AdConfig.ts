@@ -19,7 +19,7 @@ export const AD_UNIT_IDS = {
     android: 'ca-app-pub-8215136966042517/7006752588',
   },
   interstitial: {
-    ios: 'ca-app-pub-8215136966042517/1376950131',
+    ios: 'ca-app-pub-8215136966042517/1376950131', 
     android: 'ca-app-pub-8215136966042517/1376950131',
   },
   rewarded: {
@@ -28,21 +28,31 @@ export const AD_UNIT_IDS = {
   },
 };
 
+// Environment configuration
+const IS_PRODUCTION = true; // Set to true for real ads, false for test ads
+
 // Helper function to get the appropriate ad unit ID
 export const getAdUnitId = (adType: keyof typeof AD_UNIT_IDS): string => {
   const adUnit = AD_UNIT_IDS[adType];
   
   console.log(`AdConfig: Getting ad unit for ${adType}`);
   
-  // Always use production ad unit IDs
-  const productionId = Platform.select({
-    ios: adUnit.ios,
-    android: adUnit.android,
-    default: adUnit.android, // Fallback to Android ID
-  });
-  
-  console.log(`AdConfig: Using production ad unit for ${adType}:`, productionId);
-  return productionId;
+  if (IS_PRODUCTION) {
+    // Use real production ad unit IDs
+    const productionId = Platform.select({
+      ios: adUnit.ios,
+      android: adUnit.android,
+      default: adUnit.android,
+    });
+    
+    console.log(`AdConfig: Using PRODUCTION ad unit for ${adType}:`, productionId);
+    return productionId;
+  } else {
+    // Use test ad unit IDs for development
+    const testId = TestIds ? TestIds.BANNER : adUnit.android;
+    console.log(`AdConfig: Using TEST ad unit for ${adType}:`, testId);
+    return testId;
+  }
 };
 
 // Ad configuration
@@ -52,8 +62,19 @@ export const AD_CONFIG = {
   
   // Ad request configuration
   requestConfig: {
-    requestNonPersonalizedAdsOnly: false,
+    requestNonPersonalizedAdsOnly: false, // Set to true if you want non-personalized ads only
     keywords: ['education', 'language', 'learning', 'telugu', 'study', 'vocabulary', 'indian', 'south indian'],
     contentUrl: 'https://telugulearning.app',
+    // Additional targeting options for better ad relevance
+    location: {
+      latitude: 17.3850, // Hyderabad coordinates (optional)
+      longitude: 78.4867,
+    },
+  },
+  
+  // Production settings
+  production: {
+    enableTestDevices: false, // Disable test devices for production
+    enableLogging: false, // Disable verbose logging for production
   },
 };

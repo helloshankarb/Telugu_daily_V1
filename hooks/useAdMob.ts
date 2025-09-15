@@ -51,11 +51,16 @@ export const useAdMob = () => {
         // Not under age of consent
         tagForUnderAgeOfConsent: false,
         
-        // No test devices for production
-        testDeviceIdentifiers: [],
+        // IMPORTANT: Empty array for production to get real ads
+        testDeviceIdentifiers: [], // Keep empty for real ads
+        
+        // Additional production settings
+        tagForUnderAgeOfConsent: false,
+        maxAdContentRating: MaxAdContentRating.PG,
       });
 
       console.log('useAdMob: Request configuration set successfully');
+      console.log('useAdMob: PRODUCTION MODE - Real ads will be served');
       setIsInitialized(true);
       console.log('useAdMob: AdMob initialization completed successfully');
     } catch (error) {

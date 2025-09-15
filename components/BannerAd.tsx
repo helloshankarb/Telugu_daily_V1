@@ -57,12 +57,13 @@ export default function BannerAdComponent({
   }
 
   const finalAdUnitId = adUnitId || getAdUnitId('banner');
-  const finalSize = size || BannerAdSize.BANNER; // Use standard banner instead of adaptive
+  const finalSize = size || BannerAdSize.ADAPTIVE_BANNER; // Use adaptive banner for better performance
 
-  console.log('BannerAd: Rendering with unitId:', finalAdUnitId);
+  console.log('BannerAd: Rendering PRODUCTION ad with unitId:', finalAdUnitId);
+  console.log('BannerAd: Using size:', finalSize);
   
   const handleAdLoaded = () => {
-    console.log('BannerAd: Ad loaded successfully');
+    console.log('BannerAd: REAL AD loaded successfully');
     setAdLoaded(true);
     setIsLoading(false);
     setAdError(null);
@@ -70,7 +71,7 @@ export default function BannerAdComponent({
   };
 
   const handleAdFailedToLoad = (error: any) => {
-    console.error('BannerAd: Ad failed to load:', error);
+    console.error('BannerAd: REAL AD failed to load:', error);
     setAdLoaded(false);
     setIsLoading(false);
     setAdError(error?.message || 'Failed to load ad');
@@ -78,19 +79,19 @@ export default function BannerAdComponent({
   };
 
   const handleAdOpened = () => {
-    console.log('BannerAd: Ad opened');
+    console.log('BannerAd: REAL AD opened');
   };
 
   const handleAdClosed = () => {
-    console.log('BannerAd: Ad closed');
+    console.log('BannerAd: REAL AD closed');
   };
 
   const handleAdClicked = () => {
-    console.log('BannerAd: Ad clicked');
+    console.log('BannerAd: REAL AD clicked');
   };
 
   const handleAdImpression = () => {
-    console.log('BannerAd: Ad impression recorded');
+    console.log('BannerAd: REAL AD impression recorded');
   };
 
   // Reset loading state when component mounts
@@ -98,13 +99,14 @@ export default function BannerAdComponent({
     setIsLoading(true);
     setAdError(null);
     setAdLoaded(false);
+    console.log('BannerAd: Component mounted, requesting REAL AD...');
   }, [finalAdUnitId]);
 
   return (
     <View style={styles.container}>
       {isLoading && !adLoaded && !adError && (
         <View style={styles.loadingContainer}>
-          <Text style={styles.loadingText}>Loading ad...</Text>
+          <Text style={styles.loadingText}>Loading real ad...</Text>
         </View>
       )}
       
@@ -119,9 +121,11 @@ export default function BannerAdComponent({
         unitId={finalAdUnitId}
         size={finalSize}
         requestOptions={{
-          requestNonPersonalizedAdsOnly: false,
+          requestNonPersonalizedAdsOnly: AD_CONFIG.requestConfig.requestNonPersonalizedAdsOnly,
           keywords: AD_CONFIG.requestConfig.keywords,
           contentUrl: AD_CONFIG.requestConfig.contentUrl,
+          // Additional request options for better ad targeting
+          location: AD_CONFIG.requestConfig.location,
         }}
         onAdLoaded={handleAdLoaded}
         onAdFailedToLoad={handleAdFailedToLoad}
