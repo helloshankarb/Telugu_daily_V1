@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Play, RotateCcw, CircleCheck as CheckCircle, Circle, Trophy, Target } from 'lucide-react-native';
+import { Ionicons } from '@expo/vector-icons';
 import * as Speech from 'expo-speech';
 import { getSentencesByDay } from '@/data/sentences';
 import { useTheme } from '@/hooks/useTheme';
@@ -139,7 +139,7 @@ export default function HomeScreen() {
         <View style={styles.headerContent}>
           <Text style={styles.appTitle}>Telugu Daily</Text>
           <TouchableOpacity style={styles.resetButton} onPress={resetProgress}>
-            <RotateCcw size={20} color="#FFFFFF" />
+            <Ionicons name="refresh" size={20} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
         
@@ -184,7 +184,7 @@ export default function HomeScreen() {
                     onPress={() => handleTextToSpeech(sentence.telugu, false)}
                   >
                     <Text style={styles.teluguText}>{sentence.telugu}</Text>
-                    <Play size={20} color="#4ECDC4" style={styles.playIcon} />
+                    <Ionicons name="play-circle" size={20} color="#4ECDC4" style={styles.playIcon} />
                   </TouchableOpacity>
                   
                   <TouchableOpacity 
@@ -192,15 +192,15 @@ export default function HomeScreen() {
                     onPress={() => handleTextToSpeech(sentence.english, true)}
                   >
                     <Text style={styles.englishText}>{sentence.english}</Text>
-                    <Play size={16} color="#F5A623" style={styles.playIcon} />
+                    <Ionicons name="play-circle" size={16} color="#F5A623" style={styles.playIcon} />
                   </TouchableOpacity>
 
                   <TouchableOpacity
                     style={getButtonStyle(sentence.id)}
                     onPress={() => handleKnowIt(sentence.id)}
                   >
-                    {status === 'mastered' && <CheckCircle size={16} color="#F5A623" style={styles.checkIcon} />}
-                    {status === 'learning' && <CheckCircle size={16} color="#27AE60" style={styles.checkIcon} />}
+                    {status === 'mastered' && <Ionicons name="checkmark-circle" size={16} color="#F5A623" style={styles.checkIcon} />}
+                    {status === 'learning' && <Ionicons name="checkmark-circle" size={16} color="#27AE60" style={styles.checkIcon} />}
                     <Text style={getButtonTextStyle(sentence.id)}>
                       {getButtonText(sentence.id)}
                     </Text>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { User, Settings, Volume2, Moon, Palette, Trophy } from 'lucide-react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
 
 export default function ProfileScreen() {
@@ -54,7 +54,7 @@ export default function ProfileScreen() {
         {/* User Info */}
         <View style={styles.userInfo}>  
           <View style={styles.avatar}>
-            <User size={32} color="#FFFFFF" />
+            <Ionicons name="person" size={32} color="#FFFFFF" />
           </View>
           <View style={styles.userDetails}>
             <Text style={styles.userName}>{userStats.name}</Text>
@@ -83,7 +83,7 @@ export default function ProfileScreen() {
         {/* Achievements */}
         <View style={[styles.sectionContainer, { backgroundColor: theme.cardBackground }]}>
           <View style={styles.sectionHeader}>
-            <Trophy size={20} color="#F5A623" />
+            <Ionicons name="trophy" size={20} color="#F5A623" />
             <Text style={[styles.sectionTitle, { color: theme.textPrimary }]}>Achievements</Text>
           </View>
           <View style={styles.achievementsGrid}>
@@ -118,14 +118,14 @@ export default function ProfileScreen() {
         {/* Settings */}
         <View style={[styles.sectionContainer, { backgroundColor: theme.cardBackground }]}>
           <View style={styles.sectionHeader}>
-            <Settings size={20} color="#2AA8A8" />
+            <Ionicons name="settings" size={20} color="#2AA8A8" />
             <Text style={[styles.sectionTitle, { color: theme.textPrimary }]}>Settings</Text>
           </View>
           
           <View style={styles.settingsList}>
             <View style={styles.settingItem}>
               <View style={styles.settingLeft}>
-                <Volume2 size={20} color="#2AA8A8" />
+                <Ionicons name="volume-high" size={20} color="#2AA8A8" />
                 <Text style={[styles.settingText, { color: theme.textPrimary }]}>Sound Effects</Text>
               </View>
               <Switch
@@ -138,7 +138,7 @@ export default function ProfileScreen() {
 
             <View style={styles.settingItem}>
               <View style={styles.settingLeft}>
-                <Moon size={20} color="#2AA8A8" />
+                <Ionicons name="moon" size={20} color="#2AA8A8" />
                 <Text style={[styles.settingText, { color: theme.textPrimary }]}>Night Mode</Text>
               </View>
               <Switch
@@ -151,7 +151,7 @@ export default function ProfileScreen() {
 
             <View style={styles.settingItem}>
               <View style={styles.settingLeft}>
-                <Palette size={20} color="#2AA8A8" />
+                <Ionicons name="color-palette" size={20} color="#2AA8A8" />
                 <Text style={styles.settingText}>Text Zoom</Text>
               </View>
               <Switch

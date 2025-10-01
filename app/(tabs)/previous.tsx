@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Play, ChevronDown, ChevronRight, Lock, Clock as Unlock } from 'lucide-react-native';
+import { Ionicons } from '@expo/vector-icons';
 import * as Speech from 'expo-speech';
 import { sentences } from '@/data/sentences';
 import { useTheme } from '@/hooks/useTheme';
@@ -102,11 +102,11 @@ export default function PreviousScreen() {
                     <Text style={styles.dayBadgeText}>50</Text>
                   </View>
                   {!isUnlocked ? (
-                    <Lock size={20} color="#8E8E93" />
+                    <Ionicons name="lock-closed" size={20} color="#8E8E93" />
                   ) : isExpanded ? (
-                    <ChevronDown size={20} color="#2AA8A8" />
+                    <Ionicons name="chevron-down" size={20} color="#2AA8A8" />
                   ) : (
-                    <ChevronRight size={20} color="#2AA8A8" />
+                    <Ionicons name="chevron-forward" size={20} color="#2AA8A8" />
                   )}
                 </View>
               </TouchableOpacity>
@@ -130,7 +130,7 @@ export default function PreviousScreen() {
                           onPress={() => handleTextToSpeech(sentence.telugu, false)}
                         >
                           <Text style={styles.teluguText}>{sentence.telugu}</Text>
-                          <Play size={18} color="#2AA8A8" style={styles.playIcon} />
+                          <Ionicons name="play-circle" size={18} color="#2AA8A8" style={styles.playIcon} />
                         </TouchableOpacity>
                         
                         <TouchableOpacity 
@@ -138,7 +138,7 @@ export default function PreviousScreen() {
                           onPress={() => handleTextToSpeech(sentence.english, true)}
                         >
                           <Text style={styles.englishText}>{sentence.english}</Text>
-                          <Play size={14} color="#F5A623" style={styles.playIcon} />
+                          <Ionicons name="play-circle" size={14} color="#F5A623" style={styles.playIcon} />
                         </TouchableOpacity>
                       </View>
                     );

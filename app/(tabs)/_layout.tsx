@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Chrome as Home, BookOpen, ChartBar as BarChart3, User } from 'lucide-react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 // Define the icon props type
 type TabBarIconProps = {
@@ -33,7 +33,7 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ size, color }: TabBarIconProps) => (
-            <Home size={size} color={color} />
+            <Ionicons name="home" size={size} color={color} />
           ),
         }}
       />
@@ -42,7 +42,7 @@ export default function TabLayout() {
         options={{
           title: 'Previous',
           tabBarIcon: ({ size, color }: TabBarIconProps) => (
-            <BookOpen size={size} color={color} />
+            <Ionicons name="book" size={size} color={color} />
           ),
         }}
       />
@@ -51,7 +51,7 @@ export default function TabLayout() {
         options={{
           title: 'Progress',
           tabBarIcon: ({ size, color }: TabBarIconProps) => (
-            <BarChart3 size={size} color={color} />
+            <Ionicons name="bar-chart" size={size} color={color} />
           ),
         }}
       />
@@ -60,7 +60,7 @@ export default function TabLayout() {
         options={{
           title: 'Profile',
           tabBarIcon: ({ size, color }: TabBarIconProps) => (
-            <User size={size} color={color} />
+            <Ionicons name="person" size={size} color={color} />
           ),
         }}
       />

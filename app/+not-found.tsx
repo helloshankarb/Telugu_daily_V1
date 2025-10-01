@@ -1,7 +1,7 @@
 import { Link, Stack } from 'expo-router';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Chrome as Home, ArrowLeft } from 'lucide-react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function NotFoundScreen() {
   return (
@@ -16,7 +16,7 @@ export default function NotFoundScreen() {
           <View style={styles.headerContent}>
             <Text style={styles.headerTitle}>Oops!</Text>
             <TouchableOpacity style={styles.homeButton}>
-              <Home size={24} color="#FFFFFF" />
+              <Ionicons name="home" size={24} color="#FFFFFF" />
             </TouchableOpacity>
           </View>
           <Text style={styles.headerSubtitle}>Page not found</Text>
@@ -33,7 +33,7 @@ export default function NotFoundScreen() {
             
             <Link href="/" asChild>
               <TouchableOpacity style={styles.homeLink}>
-                <ArrowLeft size={20} color="#FFFFFF" />
+                <Ionicons name="arrow-back" size={20} color="#FFFFFF" />
                 <Text style={styles.homeLinkText}>Go to Home</Text>
               </TouchableOpacity>
             </Link>

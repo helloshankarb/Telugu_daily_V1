@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { TrendingUp, Award, Target, Calendar } from 'lucide-react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
 
 export default function ProgressScreen() {
@@ -61,17 +61,17 @@ export default function ProgressScreen() {
         {/* Progress Stats */}
         <View style={styles.statsContainer}>
           <View style={styles.statCard}>
-            <TrendingUp size={24} color="#2AA8A8" />
+            <Ionicons name="trending-up" size={24} color="#2AA8A8" />
             <Text style={styles.statNumber}>{progressData.completionRate}%</Text>
             <Text style={styles.statLabel}>Completion Rate</Text>
           </View>
           <View style={styles.statCard}>
-            <Target size={24} color="#F5A623" />
+            <Ionicons name="trophy" size={24} color="#F5A623" />
             <Text style={styles.statNumber}>{masteredSentences}</Text>
             <Text style={styles.statLabel}>Mastered</Text>
           </View>
           <View style={styles.statCard}>
-            <Calendar size={24} color="#27AE60" />
+            <Ionicons name="calendar" size={24} color="#27AE60" />
             <Text style={styles.statNumber}>{progressData.totalDays}</Text>
             <Text style={styles.statLabel}>Days Active</Text>
           </View>
@@ -171,7 +171,7 @@ export default function ProgressScreen() {
                 </Text>
               </View>
               {milestone.completed && (
-                <Award size={20} color="#27AE60" style={styles.completedIcon} />
+                <Ionicons name="medal" size={20} color="#27AE60" style={styles.completedIcon} />
               )}
             </View>
           ))}
