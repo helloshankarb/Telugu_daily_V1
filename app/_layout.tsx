@@ -13,8 +13,8 @@ export default function RootLayout() {
   useFrameworkReady();
   const { isInitialized } = useAdMob();
   const [showSplash, setShowSplash] = useState(true);
-  const fadeAnim = new Animated.Value(1);
-  const scaleAnim = new Animated.Value(0.8);
+  const [fadeAnim] = useState(new Animated.Value(1));
+  const [scaleAnim] = useState(new Animated.Value(0.8));
 
   let [fontsLoaded] = useFonts({
     'Poppins-Regular': Poppins_400Regular,
